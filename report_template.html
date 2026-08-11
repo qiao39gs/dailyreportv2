@@ -6,13 +6,13 @@
     <style>{{ inline_css }}</style>
 </head>
 <body>
-    <header>
+    <header class="masthead">
         <h1>{{ reportInfo.groupName }}日报</h1>
         <p class="date">{{ reportInfo.date }}</p>
         <div class="meta-info">
-            <span>总消息数：{{ reportInfo.messageCount }}</span>
-            <span>活跃用户：{{ reportInfo.activeUsers }}</span>
-            <span>时间范围：{{ reportInfo.timeRange }}</span>
+            <span class="meta-item"><span class="meta-label">总消息数：</span><span class="meta-value">{{ reportInfo.messageCount }}</span></span>
+            <span class="meta-item"><span class="meta-label">活跃用户：</span><span class="meta-value">{{ reportInfo.activeUsers }}</span></span>
+            <span class="meta-item"><span class="meta-label">时间范围：</span><span class="meta-value">{{ reportInfo.timeRange }}</span></span>
         </div>
     </header>
 
@@ -40,7 +40,7 @@
         <div class="tutorials-container">
             {% for resource in sharedResources %}
             <div class="tutorial-card">
-                <div class="tutorial-type">{{ resource.type }}</div>
+                <div class="tutorial-type type-{{ resource.type | lower }}">{{ resource.type }}</div>
                 <h3>{{ resource.title }}</h3>
                 <div class="tutorial-meta">
                     {% if resource.avatar %}<img class="inline-avatar" src="{{ resource.avatar }}" alt="{{ resource.sharedBy }}头像">{% endif %}
@@ -95,12 +95,14 @@
                 <div class="dialogue-content">
                     {% for msg in dialogue.content %}
                     <div class="message">
-                        <div class="message-meta">
-                            {% if msg.avatar %}<img class="inline-avatar" src="{{ msg.avatar }}" alt="{{ msg.speaker }}头像">{% endif %}
-                            <span class="speaker">{{ msg.speaker }}</span>
-                            <span class="time">{{ msg.time }}</span>
+                        {% if msg.avatar %}<img class="inline-avatar" src="{{ msg.avatar }}" alt="{{ msg.speaker }}头像">{% endif %}
+                        <div class="msg-body">
+                            <div class="message-meta">
+                                <span class="speaker">{{ msg.speaker }}</span>
+                                <span class="time">{{ msg.time }}</span>
+                            </div>
+                            <p class="message-content">{{ msg.message }}</p>
                         </div>
-                        <p class="message-content">{{ msg.message }}</p>
                     </div>
                     {% endfor %}
                 </div>
@@ -131,7 +133,7 @@
                 </div>
                 <div class="answers">
                     {% for answer in qa.answers %}
-                    <div class="answer">
+                    <div class="answer{% if answer.isBest %} answer-best{% endif %}">
                         <div class="answer-meta">
                             {% if answer.avatar %}<img class="inline-avatar" src="{{ answer.avatar }}" alt="{{ answer.responder }}头像">{% endif %}
                             <span class="responder">{{ answer.responder }}</span>
@@ -190,18 +192,22 @@
         <h3>熬夜冠军</h3>
         <div class="night-owls-container">
             <div class="night-owl-item">
-                <div class="owl-crown" title="熬夜冠军">👑</div>
-                {% if analytics.nightOwl.avatar %}
-                <img class="owl-avatar" src="{{ analytics.nightOwl.avatar }}" alt="{{ analytics.nightOwl.name }}头像">
-                {% endif %}
-                <div class="owl-info">
-                    <div class="owl-name">{{ analytics.nightOwl.name }}</div>
-                    <div class="owl-title">{{ analytics.nightOwl.title }}</div>
-                    <div class="owl-time">最晚活跃时间：{{ analytics.nightOwl.lastTime }}</div>
-                    <div class="owl-messages">深夜消息数：{{ analytics.nightOwl.messages }}</div>
-                    <div class="owl-last-message">{{ analytics.nightOwl.lastMessage }}</div>
-                    <div class="owl-note">注：熬夜时段定义为23:00-06:00，已考虑不同时区</div>
+                <div class="owl-header">
+                    <div class="owl-crown" title="熬夜冠军">👑</div>
+                    {% if analytics.nightOwl.avatar %}
+                    <img class="owl-avatar" src="{{ analytics.nightOwl.avatar }}" alt="{{ analytics.nightOwl.name }}头像">
+                    {% endif %}
+                    <div class="owl-info">
+                        <div class="owl-name">{{ analytics.nightOwl.name }}</div>
+                        <div class="owl-title">{{ analytics.nightOwl.title }}</div>
+                    </div>
+                    <div class="owl-stats">
+                        <div class="owl-time">最晚活跃时间：{{ analytics.nightOwl.lastTime }}</div>
+                        <div class="owl-messages">深夜消息数：{{ analytics.nightOwl.messages }}</div>
+                    </div>
                 </div>
+                <div class="owl-last-message">{{ analytics.nightOwl.lastMessage }}</div>
+                <div class="owl-note">注：熬夜时段定义为23:00-06:00，已考虑不同时区</div>
             </div>
         </div>
     </section>
