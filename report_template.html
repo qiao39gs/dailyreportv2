@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ reportInfo.groupName }}日报 - {{ reportInfo.date }}</title>
+    <style>{{ inline_css }}</style>
+</head>
+<body>
+    <header>
+        <h1>{{ reportInfo.groupName }}日报</h1>
+        <p class="date">{{ reportInfo.date }}</p>
+        <div class="meta-info">
+            <span>总消息数：{{ reportInfo.messageCount }}</span>
+            <span>活跃用户：{{ reportInfo.activeUsers }}</span>
+            <span>时间范围：{{ reportInfo.timeRange }}</span>
+        </div>
+    </header>
+
+    <section class="hot-topics">
+        <h2>今日讨论热点</h2>
+        <div class="topics-container">
+            {% for topic in hotTopics %}
+            <div class="topic-card">
+                <h3>{{ topic.name }}</h3>
+                <div class="topic-category">{{ topic.category }}</div>
+                <p class="topic-summary">{{ topic.summary }}</p>
+                <div class="topic-keywords">
+                    {% for kw in topic.keywords %}
+                    <span class="keyword">{{ kw }}</span>
+                    {% endfor %}
+                </div>
+                <div class="topic-mentions">提及次数：{{ topic.mentions }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="tutorials">
+        <h2>实用教程与资源分享</h2>
+        <div class="tutorials-container">
+            {% for resource in sharedResources %}
+            <div class="tutorial-card">
+                <div class="tutorial-type">{{ resource.type }}</div>
+                <h3>{{ resource.title }}</h3>
+                <div class="tutorial-meta">
+                    {% if resource.avatar %}<img class="inline-avatar" src="{{ resource.avatar }}" alt="{{ resource.sharedBy }}头像">{% endif %}
+                    <span class="shared-by">分享者：{{ resource.sharedBy }}</span>
+                    <span class="share-time">时间：{{ resource.time }}</span>
+                </div>
+                <p class="tutorial-summary">{{ resource.summary }}</p>
+                <div class="key-points">
+                    <h4>要点：</h4>
+                    <ul>
+                        {% for point in resource.keyPoints %}
+                        <li>{{ point }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="tutorial-link">
+                    <a href="{{ resource.link }}" class="link valid">查看原文: {{ resource.domain }}</a>
+                </div>
+                <div class="tutorial-category">分类：{{ resource.category }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="important-messages">
+        <h2>重要消息汇总</h2>
+        <div class="messages-container">
+            {% for msg in importantMessages %}
+            <div class="message-card">
+                <div class="message-meta">
+                    {% if msg.avatar %}<img class="inline-avatar" src="{{ msg.avatar }}" alt="{{ msg.sender }}头像">{% endif %}
+                    <span class="time">{{ msg.time }}</span>
+                    <span class="sender">{{ msg.sender }}</span>
+                    <span class="message-type">{{ msg.type }}</span>
+                    <span class="priority priority-{{ msg.priority | lower }}">优先级：{{ msg.priority }}</span>
+                </div>
+                <p class="message-content">{{ msg.content }}</p>
+                <div class="message-full-content">
+                    <p>{{ msg.fullContent }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="interesting-dialogues">
+        <h2>有趣对话或金句</h2>
+        <div class="dialogues-container">
+            {% for dialogue in interestingDialogues %}
+            <div class="dialogue-card">
+                <div class="dialogue-type">{{ dialogue.type }}</div>
+                <div class="dialogue-content">
+                    {% for msg in dialogue.content %}
+                    <div class="message">
+                        <div class="message-meta">
+                            {% if msg.avatar %}<img class="inline-avatar" src="{{ msg.avatar }}" alt="{{ msg.speaker }}头像">{% endif %}
+                            <span class="speaker">{{ msg.speaker }}</span>
+                            <span class="time">{{ msg.time }}</span>
+                        </div>
+                        <p class="message-content">{{ msg.message }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="dialogue-highlight">{{ dialogue.highlight }}</div>
+                <div class="dialogue-topic">相关话题：{{ dialogue.topic }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="questions-answers">
+        <h2>问题与解答</h2>
+        <div class="qa-container">
+            {% for qa in questionsAnswers %}
+            <div class="qa-card">
+                <div class="question">
+                    <div class="question-meta">
+                        {% if qa.question.avatar %}<img class="inline-avatar" src="{{ qa.question.avatar }}" alt="{{ qa.question.asker }}头像">{% endif %}
+                        <span class="asker">{{ qa.question.asker }}</span>
+                        <span class="time">{{ qa.question.time }}</span>
+                    </div>
+                    <p class="question-content">{{ qa.question.content }}</p>
+                    <div class="question-tags">
+                        {% for tag in qa.question.tags %}
+                        <span class="tag">{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="answers">
+                    {% for answer in qa.answers %}
+                    <div class="answer">
+                        <div class="answer-meta">
+                            {% if answer.avatar %}<img class="inline-avatar" src="{{ answer.avatar }}" alt="{{ answer.responder }}头像">{% endif %}
+                            <span class="responder">{{ answer.responder }}</span>
+                            <span class="time">{{ answer.time }}</span>
+                            {% if answer.isBest %}<span class="accepted-badge">最佳回答</span>{% endif %}
+                        </div>
+                        <p class="answer-content">{{ answer.content }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="analytics">
+        <h2>群内数据可视化</h2>
+        <h3>话题热度</h3>
+        <div class="heatmap-container">
+            {% for item in analytics.topicHeatmap %}
+            <div class="heat-item">
+                <div class="heat-topic">{{ item.topic }}</div>
+                <div class="heat-percentage">{{ item.percentage }}%</div>
+                <div class="heat-bar">
+                    <div class="heat-fill" style="width: {{ item.percentage }}%; background-color: {{ item.color }};"></div>
+                </div>
+                <div class="heat-count">{{ item.count }}条消息</div>
+            </div>
+            {% endfor %}
+        </div>
+        <h3>话唠榜</h3>
+        <div class="participants-container">
+            {% for participant in analytics.chatterboard %}
+            <div class="participant-item">
+                <div class="participant-rank">{{ participant.rank }}</div>
+                {% if participant.avatar %}
+                <img class="participant-avatar" src="{{ participant.avatar }}" alt="{{ participant.name }}头像">
+                {% endif %}
+                <div class="participant-info">
+                    <div class="participant-name">{{ participant.name }}</div>
+                    <div class="participant-count">{{ participant.count }}条消息</div>
+                    <div class="participant-characteristics">
+                        {% for char in participant.characteristics %}
+                        <span class="characteristic">{{ char }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="participant-words">
+                        {% for word in participant.commonWords %}
+                        <span class="word">{{ word }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <h3>熬夜冠军</h3>
+        <div class="night-owls-container">
+            <div class="night-owl-item">
+                <div class="owl-crown" title="熬夜冠军">👑</div>
+                {% if analytics.nightOwl.avatar %}
+                <img class="owl-avatar" src="{{ analytics.nightOwl.avatar }}" alt="{{ analytics.nightOwl.name }}头像">
+                {% endif %}
+                <div class="owl-info">
+                    <div class="owl-name">{{ analytics.nightOwl.name }}</div>
+                    <div class="owl-title">{{ analytics.nightOwl.title }}</div>
+                    <div class="owl-time">最晚活跃时间：{{ analytics.nightOwl.lastTime }}</div>
+                    <div class="owl-messages">深夜消息数：{{ analytics.nightOwl.messages }}</div>
+                    <div class="owl-last-message">{{ analytics.nightOwl.lastMessage }}</div>
+                    <div class="owl-note">注：熬夜时段定义为23:00-06:00，已考虑不同时区</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="word-cloud">
+        <h2>热门词云</h2>
+        <div class="cloud-container">
+            <div class="cloud-wordcloud" id="word-cloud">
+                {% for word in wordCloud %}
+                <span class="cloud-word" style="left: {{ word.left }}px; top: {{ word.top }}px; font-size: {{ word.size }}px; color: {{ word.color }}; transform: rotate({{ word.rotate }}deg); font-weight: bold;">{{ word.word }}</span>
+                {% endfor %}
+            </div>
+            <!-- 假设legend是固定的或从数据生成，这里简化 -->
+            <div class="cloud-legend">
+                <!-- 添加legend items if needed -->
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>数据来源：{{ reportInfo.groupName }}聊天记录</p>
+        <p>生成时间：<span class="generation-time">{{ reportInfo.generationTime }}</span></p>
+        <p>统计周期：{{ reportInfo.date }} {{ reportInfo.timeRange }}</p>
+        <p class="disclaimer">免责声明：本报告内容基于群聊公开讨论，由AI自动生成，可能存在误差或遗漏。</p>
+    </footer>
+</body>
+</html>

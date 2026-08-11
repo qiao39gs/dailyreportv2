@@ -1,0 +1,21 @@
+## 字段说明
+- 可选项
+  - sharedResources-type:TUTORIAL|NEWS|RESOURCE
+  - importantMessages-type:NOTICE|EVENT|ANNOUNCEMENT|OTHER
+  - importantMessages-priority:高|中|低
+  - interestingDialogues-type:DIALOGUE|QUOTE
+- 无相关内容时，数组字段输出 `[]`
+- `hotTopics`：提取 3-5 个最热门的讨论事件。
+  - **标题命名 (`name`)**：必须是一个完整的**陈述句**或**事件概括句**，包含核心人物/事件和冲突点。例如："艾琳公开指责Taimouren职业态度恶劣"。禁止使用如"游戏讨论"、"生活日常"这类过于笼统的名词短语。
+  - **分类 (`category`)**：根据内容性质归类，如"电竞八卦"、"游戏攻略"、"生活闲聊"、"职场消费"等。
+  - **详细摘要 (`summary`)**：彻底抛弃“会议记录”视角！必须指名道姓！ 严禁使用“群友讨论了…”、“引发了…共鸣”等播音腔废话。直接将核心发言群友、爆料人或事件当事人的ID作为主语！ 直接抛出核心冲突或爆料细节（例：不要写“群友XX分享了经历”，直接写“Satsuko血泪控诉瑞幸公关，内幕监控令人发指”；不要写“讨论了凸包”，直接写“凸包200元复盘被狂批割韭菜，Kyo无辜躺枪被拉踩”）。要求：多用强动词短句（如：XX爆料、XX怒扒、XX锐评），单刀直入，信息密度极高。语气无缝贴合事件本身（吃瓜/吐槽/阴阳怪气），字数极限压缩在 100-200字。
+  - **关键词 (`keywords`)**：提取 5-8 个紧密关联的名词或术语，优先使用**人名、梗名、具体事件代号**。
+  - **提及次数 (`mentions`)**：统计包含该话题关键词或直接讨论该事件的消息条数（粗略估算）
+- `sharedResources`：提取分享的链接、教程、资讯等
+- `importantMessages`：提取通知、活动、公告等重要消息
+- `interestingDialogues`：提取有趣对话或金句
+- `questionsAnswers`：提取问答，标记最佳回答
+- `analytics.topicHeatmap`：各话题占比，每项使用不同颜色（十六进制）。`percentage` 必须填写 0-100 的百分数数值，例如 30% 填写 `30`，禁止填写 `0.3`；所有项的 `percentage` 合计应为 `100`
+- `analytics.chatterboard`：取话唠榜前10，`commonWords` 移除停用词（我、你、的、了、吗、啊、哈哈等）
+- `analytics.nightOwl`：熬夜冠军（23:00-06:59），`title` 为趣味称号
+- `wordCloud`：40-60个词，`size` 范围 14-44，`color` 从 `#00b4d8 #4cc9f0 #f25f4c #ff8906 #e53170` 中选，`left` 范围 20-550，`top` 范围 80-350，`rotate` 范围 -30 至 30
