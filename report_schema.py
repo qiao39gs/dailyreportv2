@@ -129,8 +129,7 @@ REPORT_JSON_SCHEMA = {
                                     "percentage": {
                                         "type": "number",
                                         "minimum": 0,
-                                        "maximum": 100,
-                                        "description": "百分数数值，范围为0到100。例如30%填写30，不得填写0.3。"
+                                        "maximum": 100
                                     },
                                     "count": {"type": "integer"},
                                     "color": {"type": "string"}

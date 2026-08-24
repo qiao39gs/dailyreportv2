@@ -14,7 +14,7 @@ def build_prompt(analyze_dict, chatlog_content, prompt_md):
              if analyze_dict['night_owl_king'] else "")
     return (
         f"以下信息使用真实数据：\n话唠榜：\n{top_users}熬夜冠军 (23:00 - 06:59)：\n{night}"
-        f"\n---\n【聊天记录】\n{filter_media(chatlog_content)}"
+        f"\n---\n【聊天记录】\n{filter_media(chatlog_content.replace("淫叫","银角"))}"
         f"\n---\n【可视化prompt】\n{prompt_md}"
         f"\n---\n请分析微信群聊天记录，生成日报数据。"
     )
