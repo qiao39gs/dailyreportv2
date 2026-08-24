@@ -97,7 +97,11 @@ def screenshot_html(target_file, target_dir, group_name):
     from playwright.sync_api import sync_playwright
     with sync_playwright() as p:
         browser = p.chromium.launch()
-        page = browser.new_page(viewport={"width": 800, "height": 5000})
+        context = browser.new_context(
+            viewport={"width": 800, "height": 5000},
+            device_scale_factor=2.25,
+        )
+        page = context.new_page()
         page.goto(f"file:///{target_file.replace(os.sep, '/')}")
         page.screenshot(path=os.path.join(target_dir, img_name), full_page=True)
         browser.close()
